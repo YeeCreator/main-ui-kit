@@ -1,0 +1,30 @@
+{
+  "name": "@main-ui-kit/web-host",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "echo \"web-host: no tests yet\""
+  },
+  "dependencies": {
+    "@main-ui-kit/core": "workspace:*",
+    "@main-ui-kit/exporter": "workspace:*",
+    "@main-ui-kit/host-web": "workspace:*",
+    "@main-ui-kit/mode-canvas": "workspace:*",
+    "@main-ui-kit/mode-map": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1"
+  }
+}

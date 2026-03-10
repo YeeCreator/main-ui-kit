@@ -1,7 +1,16 @@
 {
   "files": [],
+  "compilerOptions": {
+    "strict": true,
+    "forceConsistentCasingInFileNames": true
+  },
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    { "path": "./apps/web-host/tsconfig.json" },
+    { "path": "./packages/core/tsconfig.json" },
+    { "path": "./packages/host-web/tsconfig.json" },
+    { "path": "./packages/mode-canvas/tsconfig.json" },
+    { "path": "./packages/mode-map/tsconfig.json" },
+    { "path": "./packages/exporter/tsconfig.json" },
+    { "path": "./packages/shared-ui/tsconfig.json" }
   ]
 }

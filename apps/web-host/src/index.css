@@ -1,0 +1,26 @@
+:root {
+  font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  color: #14213d;
+  background: radial-gradient(circle at top left, #e9f5ff, #f5f9ff 50%, #ffffff);
+}
+
+body {
+  margin: 0;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.title {
+  margin: 0 0 12px;
+  font-size: 28px;
+}
+
+.card {
+  border: 1px solid #c8d6ea;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 16px;
+}

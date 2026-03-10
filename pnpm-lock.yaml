@@ -7,13 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      react:
-        specifier: ^19.2.0
-        version: 19.2.4
-      react-dom:
-        specifier: ^19.2.0
-        version: 19.2.4(react@19.2.4)
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.1
@@ -21,15 +14,6 @@ importers:
       '@types/node':
         specifier: ^24.10.1
         version: 24.12.0
-      '@types/react':
-        specifier: ^19.2.7
-        version: 19.2.14
-      '@types/react-dom':
-        specifier: ^19.2.3
-        version: 19.2.3(@types/react@19.2.14)
-      '@vitejs/plugin-react':
-        specifier: ^5.1.1
-        version: 5.1.4(vite@7.3.1(@types/node@24.12.0))
       eslint:
         specifier: ^9.39.1
         version: 9.39.4
@@ -48,9 +32,101 @@ importers:
       typescript-eslint:
         specifier: ^8.48.0
         version: 8.57.0(eslint@9.39.4)(typescript@5.9.3)
+
+  apps/web-host:
+    dependencies:
+      '@main-ui-kit/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@main-ui-kit/exporter':
+        specifier: workspace:*
+        version: link:../../packages/exporter
+      '@main-ui-kit/host-web':
+        specifier: workspace:*
+        version: link:../../packages/host-web
+      '@main-ui-kit/mode-canvas':
+        specifier: workspace:*
+        version: link:../../packages/mode-canvas
+      '@main-ui-kit/mode-map':
+        specifier: workspace:*
+        version: link:../../packages/mode-map
+      react:
+        specifier: ^19.2.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.7
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      '@vitejs/plugin-react':
+        specifier: ^5.1.1
+        version: 5.1.4(vite@7.3.1(@types/node@24.12.0))
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
       vite:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@24.12.0)
+
+  packages/core:
+    dependencies:
+      zod:
+        specifier: ^4.1.12
+        version: 4.3.6
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/exporter:
+    dependencies:
+      '@main-ui-kit/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/host-web:
+    dependencies:
+      '@main-ui-kit/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/mode-canvas:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/mode-map:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/shared-ui:
+    dependencies:
+      react:
+        specifier: ^19.2.0
+        version: 19.2.4
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.7
+        version: 19.2.14
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
 
 packages:
 

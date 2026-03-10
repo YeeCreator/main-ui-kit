@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@main-ui-kit/core": ["../../packages/core/src/index.ts"],
+      "@main-ui-kit/host-web": ["../../packages/host-web/src/index.ts"],
+      "@main-ui-kit/mode-canvas": ["../../packages/mode-canvas/src/index.ts"],
+      "@main-ui-kit/mode-map": ["../../packages/mode-map/src/index.ts"],
+      "@main-ui-kit/exporter": ["../../packages/exporter/src/index.ts"],
+      "@main-ui-kit/shared-ui": ["../../packages/shared-ui/src/index.tsx"]
+    }
+  },
+  "include": ["src", "vite.config.ts"]
+}
