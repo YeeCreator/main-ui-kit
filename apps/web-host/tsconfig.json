@@ -4,11 +4,14 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
     "noEmit": true,
-    "baseUrl": ".",
     "paths": {
       "@main-ui-kit/core": ["../../packages/core/src/index.ts"],
       "@main-ui-kit/host-web": ["../../packages/host-web/src/index.ts"],
+      "@main-ui-kit/mode-canvas/runtime": ["../../packages/mode-canvas/src/runtime.ts"],
+      "@main-ui-kit/mode-canvas/pixi": ["../../packages/mode-canvas/src/pixi.ts"],
       "@main-ui-kit/mode-canvas": ["../../packages/mode-canvas/src/index.ts"],
+      "@main-ui-kit/mode-map/runtime": ["../../packages/mode-map/src/runtime.ts"],
+      "@main-ui-kit/mode-map/pixi": ["../../packages/mode-map/src/pixi.ts"],
       "@main-ui-kit/mode-map": ["../../packages/mode-map/src/index.ts"],
       "@main-ui-kit/exporter": ["../../packages/exporter/src/index.ts"],
       "@main-ui-kit/shared-ui": ["../../packages/shared-ui/src/index.tsx"]

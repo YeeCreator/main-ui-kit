@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src --ext .ts,.tsx",
-    "test": "echo \"web-host: no tests yet\""
+    "test": "echo \"web-host: no unit tests\"",
+    "test:e2e": "playwright test --config playwright.config.ts",
+    "test:e2e:install": "playwright install chromium"
   },
   "dependencies": {
     "@main-ui-kit/core": "workspace:*",
@@ -21,6 +23,7 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.54.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",

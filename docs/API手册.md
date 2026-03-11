@@ -1,74 +1,164 @@
 # API手册
 
-## `@main-ui-kit/core`
+## 1. `@main-ui-kit/core`
 
-### `SceneDocumentSchema`
+### 1.1 Schema
 
-- 说明：场景文档的基础校验 Schema。
-- 关键字段：
-- `version`: 协议版本，默认 `1.0.0`。
-- `sceneId`: 场景唯一标识。
-- `mode`: 当前模式标识。
-- `nodes`: 节点数组。
+1. `SceneNodeSchema`
+- 字段：`id`、`type`、`x`、`y`。
 
-### `createSceneKitCore(options)`
+2. `SceneDocumentSchema`
+- 字段：`version`、`sceneId`、`mode`、`nodes`、`modeExtensions`。
 
-- 说明：创建内核实例。
+3. `CommandPayloadSchema`
+- 字段：`commandId`、`payload`、`timestamp`。
+
+4. `PluginManifestSchema`
+- 字段：`id`、`name`、`version`、`dependencies`。
+
+5. `ExportBundleSchema`
+- 字段：`scene`、`level`、`entities`、`metadata.version`、`metadata.exportedAt`。
+
+### 1.2 工厂函数
+
+1. `createSceneStore(options)`
 - 参数：
-- `options.appId`: 应用标识。
-- `options.initialDocument`: 可选的初始场景文档。
+- `options.document: SceneDocument`
+- `options.historyLimit?: number`（默认 `100`）
+- 返回：`SceneStore`
+
+2. `createCommandBus(store)`
+- 参数：`store: SceneStore`
+- 返回：`CommandBus`
+
+3. `createPluginRegistry()`
+- 返回：`PluginRegistry`
+
+4. `createSceneKitCore(options)`
+- 参数：
+- `options.appId: string`
+- `options.initialDocument?: Partial<SceneDocument>`
 - 返回：`SceneKitCore`
 
-### `SceneKitCore`
+### 1.3 主要接口
 
-- `boot()`: 启动内核。
-- `dispose()`: 释放内核资源。
-- `getDocument()`: 获取当前场景文档快照。
+1. `SceneStore`
+- `getSnapshot()`
+- `setDocument(document)`
+- `setNodes(nodes)`
+- `setSelection(selection)`
+- `setLastCommandId(commandId)`
+- `undo()`
+- `redo()`
+- `clearHistory()`
 
-## `@main-ui-kit/host-web`
+2. `CommandBus`
+- `register(commandId, handler)`
+- `execute(command)`
+- `undo()`
+- `redo()`
 
-### `createWebHostAdapter(core)`
+3. `PluginRegistry`
+- `register(plugin)`
+- `activate(pluginId)`
+- `deactivate(pluginId)`
+- `unregister(pluginId)`
+- `list()`
 
-- 说明：创建 Web 宿主适配器。
-- 参数：
-- `core`: 内核实例。
+4. `SceneKitCore`
+- `boot()`
+- `dispose()`
+- `getDocument()`
+- `getStore()`
+- `getCommandBus()`
+- `getPluginRegistry()`
+
+## 2. `@main-ui-kit/host-web`
+
+### 2.1 `createWebHostAdapter(core)`
+
+- 参数：`core: SceneKitCore`
 - 返回：`WebHostAdapter`
 
-### `WebHostAdapter`
+### 2.2 `WebHostAdapter`
 
-- `registerCommand(commandId, handler)`: 注册命令处理器。
-- `dispatch(commandId)`: 触发命令。
-- `saveToStorage(key)`: 将场景文档保存到本地存储。
-- `loadFromStorage(key)`: 从本地存储读取场景文档。
+1. 属性
+- `capability.storage`
+- `capability.fileIO`
 
-## `@main-ui-kit/mode-canvas`
+2. 方法
+- `registerCommand(commandId, handler)`
+- `dispatch(commandId, payload?)`
+- `saveToStorage(key, document?)`
+- `loadFromStorage(key)`
+- `downloadJson(fileName, value)`
+- `openJson()`
 
-### `createCanvasMode()`
+## 3. `@main-ui-kit/mode-canvas`
 
-- 说明：创建 Canvas 模式定义。
-- 返回：`ModeDefinition`
+### 3.1 runtime 入口
 
-## `@main-ui-kit/mode-map`
+1. `createCanvasRuntime(store)`
+2. `registerCanvasCommands(commandBus, runtime)`
+3. `createCanvasMode(options?)`
 
-### `createMapMode()`
+### 3.2 命令 ID
 
-- 说明：创建 Map 模式定义。
-- 返回：`ModeDefinition`
+1. `CanvasCommandIds.createObject` = `canvas.object.create`
+2. `CanvasCommandIds.moveObject` = `canvas.object.move`
+3. `CanvasCommandIds.setSelection` = `canvas.selection.set`
 
-## `@main-ui-kit/exporter`
+### 3.3 pixi 入口
 
-### `runExporter(document)`
+1. `CanvasPixiStage(props)`
+- `props.width: number`
+- `props.height: number`
+- `props.nodes: SceneNode[]`
+- `props.selection: string[]`
 
-- 说明：执行导出流程，生成场景与元信息产物。
-- 参数：
-- `document`: 已校验的场景文档。
+## 4. `@main-ui-kit/mode-map`
+
+### 4.1 runtime 入口
+
+1. `createMapViewportAdapter(initialState?)`
+2. `registerMapCommands(commandBus, viewport)`
+3. `createMapMode(options?)`
+
+### 4.2 相机类型
+
+1. `CameraState`
+- `x`、`y`、`zoom`、`minZoom`、`maxZoom`、`bounds?`
+
+2. `CameraBounds`
+- `minX`、`maxX`、`minY`、`maxY`
+
+### 4.3 命令 ID
+
+1. `MapCommandIds.panCamera` = `map.camera.pan`
+2. `MapCommandIds.zoomCamera` = `map.camera.zoom`
+3. `MapCommandIds.setBounds` = `map.camera.bounds`
+
+### 4.4 pixi 入口
+
+1. `PixiViewportStage(props)`
+- `props.width: number`
+- `props.height: number`
+- `props.viewportAdapter: MapViewportAdapter`
+- `props.camera: CameraState`
+- `props.onCameraChange?: (camera: CameraState) => void`
+
+## 5. `@main-ui-kit/exporter`
+
+1. `runExporter(document)`
+- 参数：`document: SceneDocument`
 - 返回：`ExportBundle`
 
-## `@main-ui-kit/shared-ui`
+2. `importSceneFromBundle(value)`
+- 参数：`value: unknown`（支持 `ExportBundle` 或 `SceneDocument`）
+- 返回：`SceneDocument`
 
-### `PanelShell(props)`
+## 6. `@main-ui-kit/shared-ui`
 
-- 说明：基础面板容器组件。
-- 参数：
-- `props.title`: 面板标题。
-- `props.children`: 面板内容。
+1. `PanelShell(props)`
+- `props.title: string`
+- `props.children: ReactNode`

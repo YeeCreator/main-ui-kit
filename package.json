@@ -9,6 +9,7 @@
     "typecheck": "pnpm --filter @main-ui-kit/core build && pnpm -r --if-present typecheck",
     "lint": "pnpm -r --if-present lint",
     "test": "pnpm -r --if-present test",
+    "test:e2e": "pnpm --filter @main-ui-kit/web-host test:e2e",
     "preview": "pnpm --filter @main-ui-kit/web-host preview"
   },
   "devDependencies": {

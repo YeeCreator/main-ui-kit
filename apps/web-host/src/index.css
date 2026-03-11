@@ -23,4 +23,60 @@ body {
   border-radius: 10px;
   background: #ffffff;
   padding: 16px;
+  margin-bottom: 16px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.toolbar button {
+  border: 1px solid #9cb6da;
+  border-radius: 8px;
+  background: #f5f9ff;
+  color: #16345a;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.toolbar button:hover {
+  background: #e8f1ff;
+}
+
+.viewport-card canvas {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.viewport-card h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #20466f;
+}
+
+.json-preview {
+  margin: 0;
+  max-height: 240px;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid #d3e1f3;
+  border-radius: 8px;
+  background: #f8fbff;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.status-text {
+  margin: 0;
+  color: #18406a;
+  font-weight: 600;
+}
+
+.error-card {
+  border-color: #d96b6b;
+  background: #fff6f6;
 }
