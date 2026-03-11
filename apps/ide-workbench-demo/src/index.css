@@ -1,0 +1,247 @@
+:root {
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #e7edf5;
+  background:
+    radial-gradient(circle at top left, rgba(85, 175, 255, 0.2), transparent 28%),
+    linear-gradient(180deg, #0e1726 0%, #111827 45%, #0a0f18 100%);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.template-shell {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto auto;
+  min-height: 100vh;
+}
+
+.template-shell__menubar,
+.template-shell__toolbar,
+.template-shell__statusbar,
+.template-shell__bottom-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+}
+
+.template-shell__menubar {
+  justify-content: space-between;
+  background: rgba(11, 18, 32, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__menubar nav,
+.template-shell__toolbar {
+  display: flex;
+  gap: 14px;
+}
+
+.template-shell__toolbar {
+  flex-wrap: wrap;
+  background: rgba(17, 28, 47, 0.82);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__toolbar button,
+.template-shell__tabs button {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+.template-shell__body {
+  display: grid;
+  grid-template-columns: 56px 260px minmax(0, 1fr) 260px;
+  min-height: 0;
+}
+
+.template-shell__activitybar,
+.template-shell__sidebar,
+.template-shell__pane,
+.template-shell__bottom-panel,
+.template-shell__statusbar {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__activitybar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  background: rgba(9, 13, 23, 0.9);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__activitybar span {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__sidebar {
+  padding: 18px;
+  background: rgba(19, 27, 44, 0.86);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__sidebar--right {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 0;
+}
+
+.template-shell__sidebar h2 {
+  margin-top: 0;
+  font-size: 0.95rem;
+}
+
+.template-shell__sidebar ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.template-shell__main {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  background: rgba(7, 11, 21, 0.72);
+}
+
+.template-shell__main--split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.template-shell__pane {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__tabs {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-x: auto;
+}
+
+.template-shell__tabs .is-active {
+  background: rgba(94, 234, 212, 0.16);
+  border-color: rgba(94, 234, 212, 0.35);
+}
+
+.template-shell__pane-content {
+  padding: 18px;
+  overflow: auto;
+}
+
+.template-shell__viewport,
+.template-shell__custom,
+.template-shell__editor {
+  min-height: 320px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 22px;
+}
+
+.template-shell__viewport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+}
+
+.template-shell__viewport--2d {
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(56, 189, 248, 0.28), rgba(16, 185, 129, 0.18));
+  background-size: auto, 24px 24px, 24px 24px, auto;
+}
+
+.template-shell__viewport--3d {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(14, 165, 233, 0.24));
+}
+
+.template-shell__editor {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', monospace;
+  background: rgba(15, 23, 42, 0.86);
+}
+
+.template-shell table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.template-shell th,
+.template-shell td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__bottom-panel {
+  justify-content: space-between;
+  background: rgba(12, 18, 31, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.template-shell__statusbar {
+  justify-content: space-between;
+  background: #0f8f7b;
+  color: #f7fffd;
+}
+
+@media (max-width: 1080px) {
+  .template-shell__body {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+
+  .template-shell__sidebar,
+  .template-shell__sidebar--right {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .template-shell__main--split {
+    grid-template-columns: 1fr;
+  }
+
+  .template-shell__toolbar,
+  .template-shell__menubar {
+    padding: 10px 12px;
+  }
+}
