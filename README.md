@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# main-ui-kit
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+`main-ui-kit` 当前阶段定位为“工作台模板生成器 + 布局元素库”，目标是让业务团队快速生成一套可运行、可扩展、可配置的 IDE 风格工作台骨架。
 
-Currently, two official plugins are available:
+## 当前能力
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. `pnpm mui-template init` 模板生成器 CLI。
+2. `ide-workbench` 主模板。
+3. 元素开关：菜单栏、工具条、活动栏、左右侧栏、底部面板、状态栏、设置页、快捷键页。
+4. 主区域模式：`single`、`split`、`tabs`、`split-tabs`。
+5. 标签内容类型：`text-editor`、`viewport-2d`、`viewport-3d`、`custom`。
+6. 两套预设：`preset-math-whiteboard`、`preset-game-workbench`。
 
-## React Compiler
+## 本地预览
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
+pnpm dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+启动后，根应用会展示仓库内置的工作台模板预览页，可直接切换预设、布局模式和元素开关。
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 生成模板工程
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm mui-template init demo-workbench --preset=preset-math-whiteboard
+pnpm mui-template init demo-game-workbench --preset=preset-game-workbench
+pnpm mui-template init custom-workbench --config=./main-ui.template.json
 ```
+
+## 目录说明
+
+1. `packages/template-generator`：模板生成器 CLI 与预设。
+2. `templates/ide-workbench`：生成器复制用的工作台模板源。
+3. `src/workbench`：仓库内预览应用使用的工作台预览组件。
+4. `docs/TEMPLATE_GENERATOR.md`：参数、预设与扩展说明。
+
+## 后续扩展建议
+
+1. 将占位视口替换为真实 2D / 3D 引擎实现。
+2. 将设置页与快捷键页接入真实配置源和命令注册表。
+3. 若需要更复杂的拖拽停靠能力，再引入专业 docking 布局库。
+
