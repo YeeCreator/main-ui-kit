@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import type { TemplateConfig } from '../generated/templateConfig';
-import { keybindingRows, settingsRows } from './sampleData';
+// @main-ui-kit-managed-shell-version: 1.0.0
+
+import { useRef, useState } from 'react';
+import type { TabContentType, TemplateConfig } from '../../generated/templateConfig';
+import { DetachedContentRouter } from '../../detached/content/DetachedContentRouter';
+import { resolvePaneMode } from '../layout-engine/resolvePaneMode';
+import { keybindingRows, settingsRows } from '../settings-keybindings/sampleData';
 
 /**
  * 预览标签类型。
  */
-type PreviewTabKind = TemplateConfig['enabledTabContents'][number] | 'settings-page' | 'keybindings-page';
+type PreviewTabKind = TabContentType | 'settings-page' | 'keybindings-page';
 
 /**
  * 工作台标签定义。
@@ -24,28 +28,18 @@ export interface WorkbenchShellProps {
 }
 
 /**
- * 渲染生成模板内的工作台壳层。
+ * 渲染模板中的托管壳层。
  * @param props 工作台参数。
  * @returns React 组件。
  */
 export function WorkbenchShell(props: WorkbenchShellProps) {
   const { config } = props;
   const idRef = useRef(0);
-  const tabsEnabled = config.mainAreaMode === 'tabs' || config.mainAreaMode === 'split-tabs';
-  const splitEnabled = config.mainAreaMode === 'split' || config.mainAreaMode === 'split-tabs';
+  const { tabsEnabled, splitEnabled } = resolvePaneMode(config.mainAreaMode);
   const [leftTabs, setLeftTabs] = useState(() => createInitialTabs(config, false));
   const [rightTabs, setRightTabs] = useState(() => createInitialTabs(config, true));
   const [activeLeftTabId, setActiveLeftTabId] = useState(leftTabs[0]?.id ?? '');
   const [activeRightTabId, setActiveRightTabId] = useState(rightTabs[0]?.id ?? '');
-
-  useEffect(() => {
-    const nextLeftTabs = sanitizeTabs(leftTabs, config, false);
-    const nextRightTabs = sanitizeTabs(rightTabs, config, true);
-    setLeftTabs(nextLeftTabs);
-    setRightTabs(nextRightTabs);
-    setActiveLeftTabId(nextLeftTabs[0]?.id ?? '');
-    setActiveRightTabId(nextRightTabs[0]?.id ?? '');
-  }, [config]);
 
   /**
    * 新建标签页。
@@ -149,6 +143,8 @@ export function WorkbenchShell(props: WorkbenchShellProps) {
               <li>默认标签：{config.defaultTabContent}</li>
               <li>2D 引擎：{config.viewport.engine2d}</li>
               <li>3D 引擎：{config.viewport.engine3d}</li>
+              <li>壳层交付：{config.deliveryModel.shell}</li>
+              <li>内容交付：{config.deliveryModel.content}</li>
             </ul>
           </aside>
         ) : null}
@@ -279,8 +275,8 @@ function renderTabContent(kind: PreviewTabKind) {
     return <div className="template-shell__viewport template-shell__viewport--3d">3D 视口占位</div>;
   }
 
-  if (kind === 'custom') {
-    return <div className="template-shell__custom">自定义视图插槽，可替换为业务组件。</div>;
+  if (kind === 'custom' || kind === 'flow-canvas') {
+    return <DetachedContentRouter contentType={kind} />;
   }
 
   return (
@@ -301,27 +297,6 @@ function renderTabContent(kind: PreviewTabKind) {
 function createInitialTabs(config: TemplateConfig, rightPane: boolean) {
   const defaultKind = rightPane ? config.enabledTabContents[1] ?? config.defaultTabContent : config.defaultTabContent;
   return [createTab(defaultKind, rightPane ? 'right-default' : 'left-default')];
-}
-
-/**
- * 清理不再可用的标签。
- * @param tabs 当前标签。
- * @param config 模板配置。
- * @param rightPane 是否为右侧窗格。
- * @returns 新的标签集合。
- */
-function sanitizeTabs(tabs: PreviewTab[], config: TemplateConfig, rightPane: boolean) {
-  const allowedKinds = new Set<PreviewTabKind>(config.enabledTabContents);
-
-  if (config.elements.settingsPage) {
-    allowedKinds.add('settings-page');
-  }
-  if (config.elements.keybindingsPage) {
-    allowedKinds.add('keybindings-page');
-  }
-
-  const filteredTabs = tabs.filter((item) => allowedKinds.has(item.kind));
-  return filteredTabs.length > 0 ? filteredTabs : createInitialTabs(config, rightPane);
 }
 
 /**
@@ -346,6 +321,7 @@ const tabTitleMap: Record<PreviewTabKind, string> = {
   'viewport-2d': '2D 视口',
   'viewport-3d': '3D 视口',
   custom: '自定义视图',
+  'flow-canvas': '流程画布',
   'settings-page': '设置',
   'keybindings-page': '快捷键',
 };

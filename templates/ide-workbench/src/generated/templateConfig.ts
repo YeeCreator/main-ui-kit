@@ -6,7 +6,15 @@ export type MainAreaMode = 'single' | 'split' | 'tabs' | 'split-tabs';
 /**
  * 标签内容类型。
  */
-export type TabContentType = 'text-editor' | 'viewport-2d' | 'viewport-3d' | 'custom';
+export type TabContentType = 'text-editor' | 'viewport-2d' | 'viewport-3d' | 'custom' | 'flow-canvas';
+
+/**
+ * 交付模型类型。
+ */
+export interface TemplateDeliveryModel {
+  shell: 'managed';
+  content: 'detached';
+}
 
 /**
  * 工作台元素开关。
@@ -37,6 +45,7 @@ export interface TemplateViewportOptions {
 export interface TemplateConfig {
   appId: string;
   template: 'ide-workbench';
+  deliveryModel: TemplateDeliveryModel;
   mainAreaMode: MainAreaMode;
   allowSplit: boolean;
   allowTabs: boolean;
@@ -52,11 +61,15 @@ export interface TemplateConfig {
 export const templateConfig: TemplateConfig = {
   appId: '__APP_ID__',
   template: 'ide-workbench',
+  deliveryModel: {
+    shell: 'managed',
+    content: 'detached',
+  },
   mainAreaMode: 'split-tabs',
   allowSplit: true,
   allowTabs: true,
-  defaultTabContent: 'text-editor',
-  enabledTabContents: ['text-editor', 'viewport-2d', 'custom'],
+  defaultTabContent: 'flow-canvas',
+  enabledTabContents: ['text-editor', 'viewport-2d', 'flow-canvas', 'custom'],
   elements: {
     menubar: true,
     toolbar: true,

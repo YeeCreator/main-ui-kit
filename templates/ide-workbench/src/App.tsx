@@ -1,5 +1,5 @@
 import { templateConfig } from './generated/templateConfig';
-import { WorkbenchShell } from './workbench/WorkbenchShell';
+import { WorkbenchShell } from './managed/workbench-shell/WorkbenchShell';
 
 /**
  * 生成模板后的应用入口。
