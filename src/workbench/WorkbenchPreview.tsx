@@ -30,6 +30,7 @@ export interface WorkbenchPreviewProps {
  */
 export function WorkbenchPreview(props: WorkbenchPreviewProps) {
   const { config } = props;
+  const isDockMode = config.mainAreaMode === 'dock';
   const splitEnabled = config.mainAreaMode === 'split' || config.mainAreaMode === 'split-tabs';
   const tabsEnabled = config.mainAreaMode === 'tabs' || config.mainAreaMode === 'split-tabs';
   const idRef = useRef(0);
@@ -102,7 +103,7 @@ export function WorkbenchPreview(props: WorkbenchPreviewProps) {
       {config.elements.toolbar ? (
         <div className="preview-shell__toolbar">
           <button type="button" onClick={() => addContentTab(false)}>新建标签</button>
-          {splitEnabled ? <button type="button" onClick={() => addContentTab(true)}>右侧新建标签</button> : null}
+          {splitEnabled && !isDockMode ? <button type="button" onClick={() => addContentTab(true)}>右侧新建标签</button> : null}
           {config.elements.settingsPage ? (
             <button type="button" onClick={() => openWorkbenchPage('settings-page')}>打开设置页</button>
           ) : null}
@@ -137,22 +138,28 @@ export function WorkbenchPreview(props: WorkbenchPreviewProps) {
         ) : null}
 
         <main className={splitEnabled ? 'preview-shell__main preview-shell__main--split' : 'preview-shell__main'}>
-          {renderPane({
-            tabsEnabled,
-            tabs: leftTabs,
-            activeTabId: activeLeftTabId,
-            onActivate: setActiveLeftTabId,
-            fallbackKind: config.defaultTabContent,
-          })}
-          {splitEnabled
-            ? renderPane({
-                tabsEnabled,
-                tabs: rightTabs,
-                activeTabId: activeRightTabId,
-                onActivate: setActiveRightTabId,
-                fallbackKind: config.enabledTabContents[1] ?? config.defaultTabContent,
-              })
-            : null}
+          {isDockMode
+            ? renderDockPreview(config)
+            : (
+                <>
+                  {renderPane({
+                    tabsEnabled,
+                    tabs: leftTabs,
+                    activeTabId: activeLeftTabId,
+                    onActivate: setActiveLeftTabId,
+                    fallbackKind: config.defaultTabContent,
+                  })}
+                  {splitEnabled
+                    ? renderPane({
+                        tabsEnabled,
+                        tabs: rightTabs,
+                        activeTabId: activeRightTabId,
+                        onActivate: setActiveRightTabId,
+                        fallbackKind: config.enabledTabContents[1] ?? config.defaultTabContent,
+                      })
+                    : null}
+                </>
+              )}
         </main>
 
         {config.elements.rightSidebar ? (
@@ -166,6 +173,10 @@ export function WorkbenchPreview(props: WorkbenchPreviewProps) {
               <div>
                 <dt>默认标签</dt>
                 <dd>{tabContentLabels[config.defaultTabContent]}</dd>
+              </div>
+              <div>
+                <dt>Dock 持久化</dt>
+                <dd>{config.docking.persistLayout ? 'on' : 'off'}</dd>
               </div>
               <div>
                 <dt>2D 引擎</dt>
@@ -241,6 +252,43 @@ function renderPane(options: {
         </div>
       ) : null}
       <div className="preview-shell__pane-content">{renderTabContent(displayKind)}</div>
+    </section>
+  );
+}
+
+/**
+ * 渲染 dock 模式预览。
+ * @param config 模板配置。
+ * @returns React 节点。
+ */
+function renderDockPreview(config: MainUiTemplateConfig) {
+  const primaryKind = config.defaultTabContent;
+  const secondaryKind = config.enabledTabContents[1] ?? config.defaultTabContent;
+
+  return (
+    <section className="preview-dock" aria-label="Dock 预览">
+      <header className="preview-dock__toolbar">
+        <button type="button">新建标签</button>
+        <button type="button">横向拆分</button>
+        <button type="button">纵向拆分</button>
+        <button type="button">移动窗格</button>
+        <button type="button">关闭窗格</button>
+      </header>
+      <div className="preview-dock__panes">
+        <section className="preview-dock__pane">
+          <div className="preview-dock__tabs">
+            <button type="button" className="is-active">{previewTabLabels[primaryKind]}</button>
+            <button type="button">设置</button>
+          </div>
+          <div className="preview-dock__content">{renderTabContent(primaryKind)}</div>
+        </section>
+        <section className="preview-dock__pane">
+          <div className="preview-dock__tabs">
+            <button type="button" className="is-active">{previewTabLabels[secondaryKind]}</button>
+          </div>
+          <div className="preview-dock__content">{renderTabContent(secondaryKind)}</div>
+        </section>
+      </div>
     </section>
   );
 }
@@ -417,6 +465,23 @@ function renderTabContent(kind: PreviewTabKind) {
     );
   }
 
+  if (kind === 'flow-canvas') {
+    return (
+      <section className="preview-pane preview-pane--flow-canvas">
+        <header className="preview-pane__header">
+          <h3>流程图画布模板</h3>
+          <p>预留节点拖拽、连线、缩放与面板联动能力，适合作为编排器与流程编辑器主视图。</p>
+        </header>
+        <div className="preview-pane__flow-grid">
+          <article>节点拖拽</article>
+          <article>端口连线</article>
+          <article>缩放平移</article>
+          <article>属性联动</article>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="preview-pane preview-pane--editor">
       <header className="preview-pane__header">
@@ -441,6 +506,7 @@ const previewTabLabels: Record<PreviewTabKind, string> = {
   'viewport-2d': '2D 视口',
   'viewport-3d': '3D 视口',
   custom: '自定义视图',
+  'flow-canvas': '流程画布',
   'settings-page': '设置',
   'keybindings-page': '快捷键',
 };

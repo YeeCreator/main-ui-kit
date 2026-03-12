@@ -26,6 +26,20 @@ pnpm mui-template upgrade-shell ./your-template-app --yes
 - 主配置文件：`main-ui.template.json`
 - 运行时导出：`src/generated/templateConfig.ts`
 
+### Dock 模式建议
+
+若需要启用 Dock 主区域，请在 `main-ui.template.json` 中设置：
+
+```json
+{
+	"mainAreaMode": "dock",
+	"docking": {
+		"persistLayout": true,
+		"layoutStorageKey": "main-ui-kit:dock-layout:v1:<your-app-id>"
+	}
+}
+```
+
 ## 可扩展点
 
 - `src/managed/workbench-shell/WorkbenchShell.tsx`：托管壳层。

@@ -12,12 +12,14 @@
 2. `pnpm mui-template init` 命令行入口。
 3. 元素开关、主区域模式、标签内容类型、设置页与快捷键页模板。
 4. 两套预设：`preset-math-whiteboard` 与 `preset-game-workbench`。
+5. Docking 灰度预设：`preset-math-dock-workbench`。
 
 ## 使用命令
 
 ```bash
 pnpm mui-template init demo-workbench --preset=preset-math-whiteboard
 pnpm mui-template init demo-game-workbench --preset=preset-game-workbench
+pnpm mui-template init demo-dock-workbench --preset=preset-math-dock-workbench
 pnpm mui-template init custom-workbench --config=./main-ui.template.json
 pnpm mui-template upgrade-shell ./demo-workbench
 pnpm mui-template upgrade-shell ./demo-workbench --yes
@@ -38,7 +40,7 @@ type WorkbenchElementFlags = {
   keybindingsPage?: boolean
 }
 
-type MainAreaMode = 'single' | 'split' | 'tabs' | 'split-tabs'
+type MainAreaMode = 'single' | 'split' | 'tabs' | 'split-tabs' | 'dock'
 
 type TabContentType = 'text-editor' | 'viewport-2d' | 'viewport-3d' | 'custom' | 'flow-canvas'
 
@@ -48,6 +50,10 @@ type MainUiTemplateConfig = {
   mainAreaMode: MainAreaMode
   allowSplit: boolean
   allowTabs: boolean
+  docking: {
+    persistLayout: boolean
+    layoutStorageKey: string
+  }
   deliveryModel: {
     shell: 'managed'
     content: 'detached'
@@ -117,6 +123,13 @@ type MainUiTemplateConfig = {
 3. 内容类型：`text-editor`、`viewport-2d`、`viewport-3d`、`custom`
 4. 典型用途：小游戏编辑台、规则实验台、混合 2D/3D 工具台
 
+### preset-math-dock-workbench
+
+1. 主区域模式：`dock`
+2. 默认标签：`flow-canvas`
+3. 内容类型：`text-editor`、`flow-canvas`、`custom`
+4. 典型用途：流程图编辑台、图形化编排工作台、可二开的 Docking 工具宿主
+
 ## 生成结果
 
 生成器会输出以下核心文件：
@@ -140,7 +153,72 @@ type MainUiTemplateConfig = {
 1. 壳层升级：执行 `pnpm mui-template upgrade-shell <目录>` 先 dry-run，再用 `--yes` 写入。
 2. 内容升级：通过对比模板变更说明手动选择性合并。
 3. 涉及第三方模块（如 x6）时，建议将“基础适配层”与“业务魔改层”分目录管理，降低后续合并成本。
-4. 升级报告输出到 `main-ui.template.upgrade-report.json`，包含新增/更新/冲突/跳过明细。
+4. 升级报告输出到 `main-ui.template.upgrade-report.json`，包含升级路径 `shellVersion.from -> shellVersion.to`。
+5. 冲突分级采用 A/B/C：
+  - A：可自动升级（同主版本或首次托管）
+  - B：建议人工确认（跨主版本或版本标识异常）
+  - C：禁止自动覆盖（缺少托管标识，疑似用户魔改）
+
+## 阶段二升级策略（Plan 007）
+
+1. 版本路径治理：升级报告必须包含 `from -> to`，并标注路径决策。
+2. 冲突分级治理：优先处理 C 级，再处理 B 级，A 级可自动执行。
+3. 先 dry-run 再写入：`upgrade-shell` 默认不写盘，建议先评估再执行 `--yes`。
+4. 内容层保护：任何升级都不应改动 `src/detached/**`。
+
+## Dock 模式迁移（Plan 008）
+
+1. 从 `split-tabs` 迁移到 `dock`：将 `main-ui.template.json` 的 `mainAreaMode` 改为 `dock`。
+2. 建议同时开启 `docking.persistLayout=true`，并指定 `docking.layoutStorageKey`。
+3. 若需要快速回退，仅需将 `mainAreaMode` 改回 `split-tabs` 并重启模板工程。
+4. Dock 模式下仍通过 `DetachedContentRouter` 渲染剥离层内容，业务魔改边界保持不变。
+
+## 用户魔改建议目录规范
+
+建议在剥离层按“三段式”组织，降低后续升级合并成本：
+
+1. `src/detached/integrations/**`：第三方引擎基础适配（x6/Monaco/Three）。
+2. `src/detached/business/**`：业务规则与领域组件。
+3. `src/detached/content/**`：标签内容路由与装配。
+
+建议实践：
+
+1. 第三方适配层尽量保持薄封装，不直接耦合业务模型。
+2. 业务魔改优先落在 `business/**`，避免改动适配层公共接口。
+3. 标签路由只做装配，不承载复杂业务逻辑。
+
+## 常见问题与故障排查（FAQ）
+
+### Q1：`upgrade-shell` 没有写入任何文件
+
+原因：默认是 dry-run。  
+处理：追加 `--yes` 才会实际写入。
+
+### Q2：报告中出现 B 级冲突
+
+原因：常见于跨主版本升级或版本标识异常。  
+处理：按报告逐项人工确认，必要时先备份目标托管文件再覆盖。
+
+### Q3：报告中出现 C 级冲突
+
+原因：目标文件缺少托管标识，疑似被用户魔改。  
+处理：默认不要自动覆盖；手动对比模板源文件与本地魔改后再合并。
+
+### Q4：x6 页面空白或加载失败
+
+排查：
+
+1. 确认模板工程依赖安装成功（`pnpm --dir <模板目录> install`）。
+2. 确认 `@antv/x6` 依赖存在于模板 `package.json`。
+3. 检查浏览器控制台是否有动态导入失败信息。
+
+### Q5：升级后业务视图异常
+
+排查：
+
+1. 确认异常是否来自 `src/managed/**` 还是 `src/detached/**`。
+2. 若来自剥离层，优先回滚业务魔改并分步恢复。
+3. 若来自托管层，结合升级报告检查是否存在 B/C 级冲突未处理。
 
 ## W4 评审通道
 
@@ -157,6 +235,7 @@ type MainUiTemplateConfig = {
 pnpm mui-template init demo-workbench --preset=preset-math-whiteboard --force
 pnpm mui-template upgrade-shell demo-workbench
 pnpm mui-template upgrade-shell demo-workbench --yes
-pnpm --dir demo-workbench install --ignore-workspace
+pnpm --dir demo-workbench install
 pnpm --dir demo-workbench build
+pnpm test:template-regression
 ```

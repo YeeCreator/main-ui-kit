@@ -1,7 +1,7 @@
 /**
  * 主区域模式类型。
  */
-export type MainAreaMode = 'single' | 'split' | 'tabs' | 'split-tabs';
+export type MainAreaMode = 'single' | 'split' | 'tabs' | 'split-tabs' | 'dock';
 
 /**
  * 标签内容类型。
@@ -40,6 +40,14 @@ export interface TemplateViewportOptions {
 }
 
 /**
+ * Docking 配置。
+ */
+export interface TemplateDockingOptions {
+  persistLayout: boolean;
+  layoutStorageKey: string;
+}
+
+/**
  * 模板配置类型。
  */
 export interface TemplateConfig {
@@ -49,6 +57,7 @@ export interface TemplateConfig {
   mainAreaMode: MainAreaMode;
   allowSplit: boolean;
   allowTabs: boolean;
+  docking: TemplateDockingOptions;
   defaultTabContent: TabContentType;
   enabledTabContents: TabContentType[];
   elements: WorkbenchElementFlags;
@@ -68,6 +77,10 @@ export const templateConfig: TemplateConfig = {
   mainAreaMode: 'split-tabs',
   allowSplit: true,
   allowTabs: true,
+  docking: {
+    persistLayout: true,
+    layoutStorageKey: 'main-ui-kit:dock-layout:v1:__APP_ID__',
+  },
   defaultTabContent: 'flow-canvas',
   enabledTabContents: ['text-editor', 'viewport-2d', 'flow-canvas', 'custom'],
   elements: {

@@ -49,8 +49,8 @@ function App() {
     setConfig((currentConfig) => ({
       ...currentConfig,
       mainAreaMode: mode,
-      allowSplit: mode === 'split' || mode === 'split-tabs',
-      allowTabs: mode === 'tabs' || mode === 'split-tabs',
+      allowSplit: mode === 'split' || mode === 'split-tabs' || mode === 'dock',
+      allowTabs: mode === 'tabs' || mode === 'split-tabs' || mode === 'dock',
     }));
   }
 

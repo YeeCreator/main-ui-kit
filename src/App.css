@@ -325,6 +325,15 @@
   background: rgba(17, 24, 39, 0.92);
 }
 
+.preview-pane--flow-canvas {
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18)),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.12) 1px, transparent 1px),
+    linear-gradient(rgba(94, 234, 212, 0.12) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(34, 197, 94, 0.18), rgba(14, 165, 233, 0.16));
+  background-size: auto, 24px 24px, 24px 24px, auto;
+}
+
 .preview-pane__header {
   display: grid;
   gap: 8px;
@@ -333,7 +342,8 @@
 
 .preview-pane__viewport-grid,
 .preview-pane__viewport-cards,
-.preview-pane__editor-lines {
+.preview-pane__editor-lines,
+.preview-pane__flow-grid {
   display: grid;
   gap: 12px;
 }
@@ -344,7 +354,8 @@
 
 .preview-pane__viewport-grid span,
 .preview-pane__viewport-cards article,
-.preview-pane__editor-lines span {
+.preview-pane__editor-lines span,
+.preview-pane__flow-grid article {
   display: flex;
   align-items: center;
   min-height: 72px;
@@ -356,6 +367,61 @@
 .preview-pane__editor-lines span {
   min-height: auto;
   font-family: 'IBM Plex Mono', 'Cascadia Code', monospace;
+}
+
+.preview-pane__flow-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.preview-dock {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+  padding: 10px;
+}
+
+.preview-dock__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.preview-dock__panes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.preview-dock__pane {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(17, 24, 39, 0.8);
+}
+
+.preview-dock__tabs {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.preview-dock__content {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 10px;
 }
 
 .preview-pane table {

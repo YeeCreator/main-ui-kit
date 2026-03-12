@@ -165,6 +165,102 @@ button {
   overflow: auto;
 }
 
+.dock-main {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  min-height: 0;
+}
+
+.dock-main__commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dock-main__commands button {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.dock-main__panes {
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  padding: 8px;
+}
+
+.dock-main__panes--row {
+  flex-direction: row;
+}
+
+.dock-main__panes--column {
+  flex-direction: column;
+}
+
+.dock-pane {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(12, 19, 35, 0.55);
+}
+
+.dock-pane.is-active {
+  border-color: rgba(94, 234, 212, 0.45);
+  box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.18) inset;
+}
+
+.dock-pane__tabs {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dock-tab {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dock-tab.is-active {
+  border-color: rgba(94, 234, 212, 0.4);
+  background: rgba(94, 234, 212, 0.16);
+}
+
+.dock-tab > button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 6px 8px;
+}
+
+.dock-tab__close {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.dock-pane__content {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px;
+}
+
 .template-shell__viewport,
 .template-shell__custom,
 .template-shell__editor {

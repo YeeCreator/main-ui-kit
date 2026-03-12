@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import type { TabContentType, TemplateConfig } from '../../generated/templateConfig';
 import { DetachedContentRouter } from '../../detached/content/DetachedContentRouter';
+import { DockMainArea } from '../layout-engine/DockMainArea';
 import { resolvePaneMode } from '../layout-engine/resolvePaneMode';
 import { keybindingRows, settingsRows } from '../settings-keybindings/sampleData';
 
@@ -35,7 +36,7 @@ export interface WorkbenchShellProps {
 export function WorkbenchShell(props: WorkbenchShellProps) {
   const { config } = props;
   const idRef = useRef(0);
-  const { tabsEnabled, splitEnabled } = resolvePaneMode(config.mainAreaMode);
+  const { tabsEnabled, splitEnabled, dockEnabled } = resolvePaneMode(config.mainAreaMode);
   const [leftTabs, setLeftTabs] = useState(() => createInitialTabs(config, false));
   const [rightTabs, setRightTabs] = useState(() => createInitialTabs(config, true));
   const [activeLeftTabId, setActiveLeftTabId] = useState(leftTabs[0]?.id ?? '');
@@ -89,8 +90,8 @@ export function WorkbenchShell(props: WorkbenchShellProps) {
 
       {config.elements.toolbar ? (
         <div className="template-shell__toolbar">
-          <button type="button" onClick={() => addTab(false)}>新建标签</button>
-          {splitEnabled ? <button type="button" onClick={() => addTab(true)}>右侧新建标签</button> : null}
+          {!dockEnabled ? <button type="button" onClick={() => addTab(false)}>新建标签</button> : null}
+          {!dockEnabled && splitEnabled ? <button type="button" onClick={() => addTab(true)}>右侧新建标签</button> : null}
           {config.elements.settingsPage ? <button type="button" onClick={() => openPage('settings-page')}>设置页</button> : null}
           {config.elements.keybindingsPage ? <button type="button" onClick={() => openPage('keybindings-page')}>快捷键页</button> : null}
         </div>
@@ -117,22 +118,33 @@ export function WorkbenchShell(props: WorkbenchShellProps) {
         ) : null}
 
         <main className={splitEnabled ? 'template-shell__main template-shell__main--split' : 'template-shell__main'}>
-          {renderPane({
-            tabsEnabled,
-            tabs: leftTabs,
-            activeTabId: activeLeftTabId,
-            onActivate: setActiveLeftTabId,
-            defaultKind: config.defaultTabContent,
-          })}
-          {splitEnabled
-            ? renderPane({
-                tabsEnabled,
-                tabs: rightTabs,
-                activeTabId: activeRightTabId,
-                onActivate: setActiveRightTabId,
-                defaultKind: config.enabledTabContents[1] ?? config.defaultTabContent,
-              })
-            : null}
+          {dockEnabled
+            ? (
+                <DockMainArea
+                  config={config}
+                  renderContent={(kind) => renderTabContent(kind as PreviewTabKind)}
+                />
+              )
+            : (
+                <>
+                  {renderPane({
+                    tabsEnabled,
+                    tabs: leftTabs,
+                    activeTabId: activeLeftTabId,
+                    onActivate: setActiveLeftTabId,
+                    defaultKind: config.defaultTabContent,
+                  })}
+                  {splitEnabled
+                    ? renderPane({
+                        tabsEnabled,
+                        tabs: rightTabs,
+                        activeTabId: activeRightTabId,
+                        onActivate: setActiveRightTabId,
+                        defaultKind: config.enabledTabContents[1] ?? config.defaultTabContent,
+                      })
+                    : null}
+                </>
+              )}
         </main>
 
         {config.elements.rightSidebar ? (
@@ -141,6 +153,8 @@ export function WorkbenchShell(props: WorkbenchShellProps) {
             <ul>
               <li>主区域模式：{config.mainAreaMode}</li>
               <li>默认标签：{config.defaultTabContent}</li>
+              <li>Dock 持久化：{config.docking.persistLayout ? 'on' : 'off'}</li>
+              <li>Dock 存储键：{config.docking.layoutStorageKey}</li>
               <li>2D 引擎：{config.viewport.engine2d}</li>
               <li>3D 引擎：{config.viewport.engine3d}</li>
               <li>壳层交付：{config.deliveryModel.shell}</li>

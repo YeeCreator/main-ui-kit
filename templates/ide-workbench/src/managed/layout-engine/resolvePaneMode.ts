@@ -8,6 +8,7 @@ import type { MainAreaMode } from '../../generated/templateConfig';
 export interface PaneModeResult {
   splitEnabled: boolean;
   tabsEnabled: boolean;
+  dockEnabled: boolean;
 }
 
 /**
@@ -19,5 +20,6 @@ export function resolvePaneMode(mainAreaMode: MainAreaMode): PaneModeResult {
   return {
     splitEnabled: mainAreaMode === 'split' || mainAreaMode === 'split-tabs',
     tabsEnabled: mainAreaMode === 'tabs' || mainAreaMode === 'split-tabs',
+    dockEnabled: mainAreaMode === 'dock',
   };
 }

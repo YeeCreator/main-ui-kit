@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "mui-template": "node ./packages/template-generator/src/cli.mjs",
+    "test:template-regression": "node ./packages/template-generator/src/regression.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

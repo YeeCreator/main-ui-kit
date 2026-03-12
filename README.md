@@ -7,9 +7,9 @@
 1. `pnpm mui-template init` 模板生成器 CLI。
 2. `ide-workbench` 主模板。
 3. 元素开关：菜单栏、工具条、活动栏、左右侧栏、底部面板、状态栏、设置页、快捷键页。
-4. 主区域模式：`single`、`split`、`tabs`、`split-tabs`。
+4. 主区域模式：`single`、`split`、`tabs`、`split-tabs`、`dock`。
 5. 标签内容类型：`text-editor`、`viewport-2d`、`viewport-3d`、`custom`、`flow-canvas`。
-6. 两套预设：`preset-math-whiteboard`、`preset-game-workbench`。
+6. 三套预设：`preset-math-whiteboard`、`preset-game-workbench`、`preset-math-dock-workbench`。
 7. 双层交付模型：`deliveryModel.shell=managed`、`deliveryModel.content=detached`。
 8. 托管壳层升级命令：`pnpm mui-template upgrade-shell <目录> [--yes]`。
 
@@ -27,6 +27,7 @@ pnpm dev
 ```bash
 pnpm mui-template init demo-workbench --preset=preset-math-whiteboard
 pnpm mui-template init demo-game-workbench --preset=preset-game-workbench
+pnpm mui-template init demo-dock-workbench --preset=preset-math-dock-workbench
 pnpm mui-template init custom-workbench --config=./main-ui.template.json
 ```
 

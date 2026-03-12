@@ -16,12 +16,12 @@ export const workbenchElementKeys = [
 /**
  * 主区域模式集合。
  */
-export const mainAreaModes = ['single', 'split', 'tabs', 'split-tabs'] as const;
+export const mainAreaModes = ['single', 'split', 'tabs', 'split-tabs', 'dock'] as const;
 
 /**
  * 标签内容类型集合。
  */
-export const tabContentTypes = ['text-editor', 'viewport-2d', 'viewport-3d', 'custom'] as const;
+export const tabContentTypes = ['text-editor', 'viewport-2d', 'viewport-3d', 'custom', 'flow-canvas'] as const;
 
 /**
  * 工作台元素键名类型。
@@ -62,14 +62,32 @@ export interface TemplateViewportOptions {
 }
 
 /**
+ * 交付模型配置。
+ */
+export interface TemplateDeliveryModel {
+  shell: 'managed';
+  content: 'detached';
+}
+
+/**
+ * Docking 配置。
+ */
+export interface TemplateDockingOptions {
+  persistLayout: boolean;
+  layoutStorageKey: string;
+}
+
+/**
  * 主模板配置结构。
  */
 export interface MainUiTemplateConfig {
   appId: string;
   template: 'ide-workbench';
+  deliveryModel: TemplateDeliveryModel;
   mainAreaMode: MainAreaMode;
   allowSplit: boolean;
   allowTabs: boolean;
+  docking: TemplateDockingOptions;
   defaultTabContent: TabContentType;
   enabledTabContents: TabContentType[];
   elements: WorkbenchElementFlags;
@@ -99,6 +117,7 @@ export const tabContentLabels: Record<TabContentType, string> = {
   'viewport-2d': '2D 视口视图',
   'viewport-3d': '3D 视口视图',
   custom: '自定义视图',
+  'flow-canvas': '流程图视图',
 };
 
 /**
@@ -111,6 +130,8 @@ export function cloneTemplateConfig(config: MainUiTemplateConfig): MainUiTemplat
     ...config,
     enabledTabContents: [...config.enabledTabContents],
     elements: { ...config.elements },
+    deliveryModel: { ...config.deliveryModel },
+    docking: { ...config.docking },
     viewport: { ...config.viewport },
   };
 }
