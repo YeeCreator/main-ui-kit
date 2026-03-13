@@ -42,5 +42,5 @@ pnpm mui-template init custom-workbench --config=./main-ui.template.json
 
 1. 将占位视口替换为真实 2D / 3D 引擎实现。
 2. 将设置页与快捷键页接入真实配置源和命令注册表。
-3. 若需要更复杂的拖拽停靠能力，再引入专业 docking 布局库。
+3. 当前 `dock` 模式为托管层最小运行时；若后续需要拖拽停靠、浮动窗格或分离窗口，再评估专业 docking 布局库。
 

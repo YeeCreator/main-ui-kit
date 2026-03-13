@@ -13,10 +13,29 @@ pnpm install
 pnpm dev
 ```
 
+## 升级托管壳层
+
+```bash
+pnpm mui-template upgrade-shell ./apps/ide-workbench-demo
+pnpm mui-template upgrade-shell ./apps/ide-workbench-demo --yes
+```
+
 ## 配置
 
 - 主配置文件：`main-ui.template.json`
 - 运行时导出：`src/generated/templateConfig.ts`
+
+### Dock 模式示例
+
+```json
+{
+	"mainAreaMode": "dock",
+	"docking": {
+		"persistLayout": true,
+		"layoutStorageKey": "main-ui-kit:dock-layout:v1:ide-workbench-demo"
+	}
+}
+```
 
 ## 可扩展点
 

@@ -11,7 +11,7 @@
 1. `ide-workbench` 主模板。
 2. `pnpm mui-template init` 命令行入口。
 3. 元素开关、主区域模式、标签内容类型、设置页与快捷键页模板。
-4. 两套预设：`preset-math-whiteboard` 与 `preset-game-workbench`。
+4. 三套预设：`preset-math-whiteboard`、`preset-game-workbench`、`preset-math-dock-workbench`。
 5. Docking 灰度预设：`preset-math-dock-workbench`。
 
 ## 使用命令
@@ -172,6 +172,7 @@ type MainUiTemplateConfig = {
 2. 建议同时开启 `docking.persistLayout=true`，并指定 `docking.layoutStorageKey`。
 3. 若需要快速回退，仅需将 `mainAreaMode` 改回 `split-tabs` 并重启模板工程。
 4. Dock 模式下仍通过 `DetachedContentRouter` 渲染剥离层内容，业务魔改边界保持不变。
+5. 当前 `dock` 为托管层最小运行时，已覆盖新建标签、拆分、移动、关闭与本地持久化；暂不包含拖拽停靠与分离窗口。
 
 ## 用户魔改建议目录规范
 

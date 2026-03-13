@@ -40,6 +40,8 @@ pnpm mui-template upgrade-shell ./your-template-app --yes
 }
 ```
 
+当前 `dock` 模式提供托管层最小运行时，支持新建标签、横向/纵向拆分、窗格移动、关闭与本地持久化；若需要拖拽停靠或分离窗口，请在业务项目中额外评估扩展方案。
+
 ## 可扩展点
 
 - `src/managed/workbench-shell/WorkbenchShell.tsx`：托管壳层。
